@@ -2,8 +2,6 @@ from pathlib import Path
 from decouple import config, Csv
 
 
-# settings.py
-
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
@@ -23,7 +21,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'patients',
     'doctors',
-    'pharmacists',
+    'pharmacies',
+    'prescriptions',
     'accounts',
     'rest_framework',
     'rest_framework_simplejwt',

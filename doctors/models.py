@@ -34,3 +34,11 @@ class Doctor(models.Model):
 
     def __str__(self):
         return f"Dr. {self.full_name} ({self.specialization})"
+
+
+class DoctorSchedule(models.Model):
+    doctor = models.ForeignKey(
+        'Doctor', on_delete=models.CASCADE, related_name='schedules')
+    day_of_week = models.CharField(max_length=10)  # e.g. Monday
+    start_time = models.TimeField()
+    end_time = models.TimeField()
