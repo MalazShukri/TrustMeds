@@ -1,66 +1,86 @@
 from django.contrib import admin
 from .models import (
-    Patient,
-    EmergencyContact,
-    Visit,
-    PatientAllergy,
-    PatientChronicDisease,
-    PatientSurgery,
-    PatientDisability,
-    PatientMedication
+    Patient, EmergencyContact, Visit,
+    PatientAllergy, PatientChronicDisease,
+    PatientSurgery, PatientDisability, PatientMedication
 )
+
+# --- Patient ---
 
 
 @admin.register(Patient)
 class PatientAdmin(admin.ModelAdmin):
-    list_display = ('first_name', 'last_name', 'date_of_birth',
-                    'gender', 'email', 'phone_number')
-    search_fields = ('first_name', 'last_name', 'email', 'phone_number')
-    list_filter = ('gender',)
+    list_display = ('id', 'first_name', 'last_name', 'phone_number',
+                    'email_address')  # 'email' -> 'email_address'
+    search_fields = ('first_name', 'last_name', 'phone_number')
 
 
+# --- Emergency Contact ---
 @admin.register(EmergencyContact)
 class EmergencyContactAdmin(admin.ModelAdmin):
-    list_display = ('patient', 'name', 'relationship', 'phone_number')
-    search_fields = ('name', 'relationship')
-    list_filter = ('relationship',)
+    # 'phone_number' -> 'phone'
+    list_display = ('id', 'name', 'relationship', 'phone')
 
 
-@admin.register(Visit)
-class VisitAdmin(admin.ModelAdmin):
-    list_display = ('patient', 'visit_date', 'reason', 'doctor_name')
-    search_fields = ('reason', 'doctor_name')
-    list_filter = ('visit_date',)
-
-
+# --- Patient Allergy ---
 @admin.register(PatientAllergy)
 class PatientAllergyAdmin(admin.ModelAdmin):
-    list_display = ('patient', 'allergy_name', 'severity')
-    search_fields = ('allergy_name',)
-    list_filter = ('severity',)
+    list_display = ('id', 'patient', 'get_allergy_name', 'notes')
+    search_fields = ('patient__first_name',)
+
+    def get_allergy_name(self, obj):
+        return obj.allergy.name
+    get_allergy_name.short_description = 'Allergy'
 
 
+# --- Patient Chronic Disease ---
 @admin.register(PatientChronicDisease)
 class PatientChronicDiseaseAdmin(admin.ModelAdmin):
-    list_display = ('patient', 'disease_name', 'diagnosis_date')
-    search_fields = ('disease_name',)
-    list_filter = ('diagnosis_date',)
+    list_display = ('id', 'patient', 'get_disease_name', 'notes')
+
+    def get_disease_name(self, obj):
+        return obj.disease.name
+    get_disease_name.short_description = 'Disease'
 
 
+# --- Patient Surgery ---
 @admin.register(PatientSurgery)
 class PatientSurgeryAdmin(admin.ModelAdmin):
-    list_display = ('patient', 'surgery_name', 'surgery_date')
-    search_fields = ('surgery_name',)
-    list_filter = ('surgery_date',)
+    list_display = ('id', 'patient', 'get_surgery_name', 'date', 'notes')
+    list_filter = ('date',)
+
+    def get_surgery_name(self, obj):
+        return obj.surgery.name
+    get_surgery_name.short_description = 'Surgery'
 
 
+# --- Patient Disability ---
 @admin.register(PatientDisability)
 class PatientDisabilityAdmin(admin.ModelAdmin):
-    list_display = ('patient', 'disability_type', 'notes')
-    search_fields = ('disability_type',)
+    list_display = ('id', 'patient', 'get_disability_name', 'notes')
+
+    def get_disability_name(self, obj):
+        return obj.disability.name
+    get_disability_name.short_description = 'Disability'
 
 
+# --- Patient Medication ---
 @admin.register(PatientMedication)
 class PatientMedicationAdmin(admin.ModelAdmin):
-    list_display = ('patient', 'medication_name', 'dosage', 'frequency')
-    search_fields = ('medication_name',)
+    list_display = ('id', 'patient', 'get_medication_name',
+                    'dosage', 'frequency')
+
+    def get_medication_name(self, obj):
+        return obj.medication.name
+    get_medication_name.short_description = 'Medication'
+
+
+# --- Visit ---
+@admin.register(Visit)
+class VisitAdmin(admin.ModelAdmin):
+    list_display = ('id', 'patient', 'visit_date',
+                    'get_doctor_name', 'diagnosis')
+
+    def get_doctor_name(self, obj):
+        return obj.doctor.full_name if obj.doctor else "-"
+    get_doctor_name.short_description = 'Doctor'
