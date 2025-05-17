@@ -1,6 +1,7 @@
 from pathlib import Path
 import os
 from decouple import config, Csv
+from datetime import timedelta
 
 
 SECRET_KEY = config('SECRET_KEY')
@@ -10,6 +11,11 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]
 
 
 
@@ -24,9 +30,12 @@ INSTALLED_APPS = [
     'doctors',
     'pharmacies',
     'prescriptions',
+    'appointments',
     'accounts',
     'rest_framework',
     'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
+    'corsheaders'
 ]
 
 
@@ -41,6 +50,9 @@ DATABASES = {
         'PORT': config('DATABASE_PORT', default='3306'),
     }
 }
+
+
+AUTH_USER_MODEL = 'accounts.User'
 
 
 
@@ -116,3 +128,18 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
+
+
+SIMPLE_JWT = {
+    'BLACKLIST_AFTER_ROTATION': True,
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'BLACKLIST_AFTER_ROTATION': True,
+    'ROTATE_REFRESH_TOKENS': False,
+}
+
+
+MIDDLEWARE.insert(0, 'corsheaders.middleware.CorsMiddleware')
+CORS_ALLOWED_ORIGINS = [
+    'https://trustmeds.netlify.app',
+]

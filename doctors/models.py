@@ -7,6 +7,9 @@ class Doctor(models.Model):
         ('F', 'Female'),
     ]
 
+    user = models.OneToOneField(
+        'accounts.User', on_delete=models.CASCADE, related_name='doctor_profile')
+    
     # Basic Info
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
@@ -15,7 +18,7 @@ class Doctor(models.Model):
 
     # Contact Info
     phone_number = models.CharField(max_length=20, blank=True)
-    email = models.EmailField(unique=True, blank=True)
+    email = models.EmailField(blank=True)
     address = models.TextField(blank=True)
 
     # Professional Info
@@ -37,8 +40,14 @@ class Doctor(models.Model):
 
 
 class DoctorSchedule(models.Model):
+    DAY_CHOICES = [
+        ('Monday', 'Monday'), ('Tuesday', 'Tuesday'),
+        ('Wednesday', 'Wednesday'), ('Thursday', 'Thursday'),
+        ('Friday', 'Friday'), ('Saturday', 'Saturday'), ('Sunday', 'Sunday')
+    ]
+
     doctor = models.ForeignKey(
         'Doctor', on_delete=models.CASCADE, related_name='schedules')
-    day_of_week = models.CharField(max_length=10)  # e.g. Monday
+    day_of_week = models.CharField(max_length=10, choices=DAY_CHOICES)
     start_time = models.TimeField()
     end_time = models.TimeField()

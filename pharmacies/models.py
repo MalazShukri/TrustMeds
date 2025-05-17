@@ -1,8 +1,9 @@
 from django.db import models
 
 
-
 class Pharmacy(models.Model):
+    user = models.OneToOneField(
+        'accounts.User', on_delete=models.CASCADE, related_name='pharmacy_profile')
     name = models.CharField(max_length=255)
     license_number = models.CharField(max_length=100, unique=True)
     address = models.TextField()

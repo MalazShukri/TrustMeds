@@ -1,6 +1,6 @@
-from django.db import models   
+from django.db import models
 
-    
+
 class Patient(models.Model):
     GENDER_CHOICES = [
         ('M', 'Male'),
@@ -13,6 +13,9 @@ class Patient(models.Model):
         ('AB+', 'AB+'), ('AB-', 'AB-'),
         ('O+', 'O+'), ('O-', 'O-'),
     ]
+
+    user = models.OneToOneField(
+        'accounts.User', on_delete=models.CASCADE, related_name='patient_profile')
 
     # Basic Info
     first_name = models.CharField(max_length=255)
@@ -34,27 +37,25 @@ class Patient(models.Model):
     address = models.TextField(blank=True)
 
     # Medical Info
-    blood_type = models.CharField(max_length=3, choices=BLOOD_TYPE_CHOICES, blank=True)
+    blood_type = models.CharField(
+        max_length=3, choices=BLOOD_TYPE_CHOICES, blank=True)
     family_history = models.TextField(blank=True)
     pregnancy_status = models.CharField(max_length=50, blank=True)
 
     # System Fields
     created_at = models.DateTimeField(auto_now_add=True)
-    
+
     def get_prescriptions(self):
         return self.prescriptions.all()
-    
+
     @property
     def full_name(self):
         return f"{self.first_name} {self.last_name}"
 
-
     def __str__(self):
         return self.full_name
-    
 
-       
-       
+
 class EmergencyContact(models.Model):
     patient = models.OneToOneField(
         'patients.Patient', on_delete=models.CASCADE, related_name='emergency_contact')
@@ -93,7 +94,6 @@ class PatientAllergy(models.Model):
     notes = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
-
     def __str__(self):
         return f"{self.patient.first_name} - {self.allergy.name}"
 
@@ -112,11 +112,8 @@ class PatientChronicDisease(models.Model):
     notes = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
-
     def __str__(self):
         return f"{self.patient.first_name} - {self.disease.name}"
-
-
 
 
 class Surgery(models.Model):
@@ -133,7 +130,6 @@ class PatientSurgery(models.Model):
     date = models.DateField(null=True, blank=True)
     notes = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-
 
     def __str__(self):
         return f"{self.patient.first_name} - {self.surgery.name}"
@@ -153,7 +149,6 @@ class PatientDisability(models.Model):
     notes = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
-
     def __str__(self):
         return f"{self.patient.first_name} - {self.disability.name}"
 
@@ -168,7 +163,6 @@ class PatientMedication(models.Model):
     start_date = models.DateField(null=True, blank=True)
     end_date = models.DateField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-
 
     def __str__(self):
         return f"{self.patient.first_name} - {self.medication.name}"
