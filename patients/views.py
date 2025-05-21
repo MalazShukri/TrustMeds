@@ -1,4 +1,5 @@
 # patients/permissions.py
+from rest_framework.permissions import AllowAny
 from doctors.serializers import DoctorSerializer
 from appointments.serializers import AppointmentSerializer
 from appointments.models import Appointment
@@ -16,6 +17,38 @@ class IsPatientUser(permissions.BasePermission):
     def has_permission(self, request, view):
         return request.user.is_authenticated and getattr(request.user, 'is_patient', False)
 
+
+# ========== PUBLICALLY ACCESSIBLE CREATION VIEWS FOR BASE MODELS ==========
+
+
+class CreateAllergyView(generics.CreateAPIView):
+    serializer_class = AllergySerializer
+    permission_classes = [AllowAny]
+    queryset = Allergy.objects.all()
+
+
+class CreateChronicDiseaseView(generics.CreateAPIView):
+    serializer_class = ChronicDiseaseSerializer
+    permission_classes = [AllowAny]
+    queryset = ChronicDisease.objects.all()
+
+
+class CreateSurgeryView(generics.CreateAPIView):
+    serializer_class = SurgerySerializer
+    permission_classes = [AllowAny]
+    queryset = Surgery.objects.all()
+
+
+class CreateDisabilityView(generics.CreateAPIView):
+    serializer_class = DisabilitySerializer
+    permission_classes = [AllowAny]
+    queryset = Disability.objects.all()
+
+
+class CreatePatientView(generics.CreateAPIView):
+    serializer_class = PatientSerializer
+    permission_classes = [AllowAny]
+    queryset = Patient.objects.all()
 
 
 

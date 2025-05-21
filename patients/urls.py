@@ -2,6 +2,19 @@ from django.urls import path
 from .views import *
 
 urlpatterns = [
+    # === Publicly accessible creation endpoints for base models ===
+    path('public/create-patient/',
+         CreatePatientView.as_view(), name='create-patient'),
+    path('public/create-allergy/', CreateAllergyView.as_view(),
+         name='create-allergy-base'),
+    path('public/create-chronic-disease/',
+         CreateChronicDiseaseView.as_view(), name='create-chronic-disease-base'),
+    path('public/create-surgery/', CreateSurgeryView.as_view(),
+         name='create-surgery-base'),
+    path('public/create-disability/', CreateDisabilityView.as_view(),
+         name='create-disability-base'),
+
+
     # === Patient Profile APIs ===
     path('me/profile/', PatientProfileView.as_view(), name='patient-profile'),
     path('me/emergency-contact/', PatientEmergencyContactView.as_view(),

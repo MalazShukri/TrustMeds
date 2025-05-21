@@ -55,3 +55,27 @@ class PatientMedicationSerializer(serializers.ModelSerializer):
     class Meta:
         model = PatientMedication
         fields = '__all__'
+
+
+class AllergySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Allergy
+        fields = '__all__'
+
+
+class ChronicDiseaseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ChronicDisease
+        fields = '__all__'
+
+
+class SurgerySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Surgery
+        fields = '__all__'
+
+
+class DisabilitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Disability
+        fields = '__all__'
