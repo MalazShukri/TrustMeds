@@ -16,6 +16,8 @@ class PatientSerializer(serializers.ModelSerializer):
 
 
 class EmergencyContactSerializer(serializers.ModelSerializer):
+    patient = serializers.StringRelatedField(read_only=True)
+
     class Meta:
         model = EmergencyContact
         fields = '__all__'
@@ -23,6 +25,9 @@ class EmergencyContactSerializer(serializers.ModelSerializer):
 
 
 class VisitSerializer(serializers.ModelSerializer):
+    patient = serializers.StringRelatedField(read_only=True)
+    doctor = serializers.StringRelatedField()
+
     class Meta:
         model = Visit
         fields = '__all__'
@@ -30,6 +35,9 @@ class VisitSerializer(serializers.ModelSerializer):
 
 
 class PatientAllergySerializer(serializers.ModelSerializer):
+    patient = serializers.StringRelatedField(read_only=True)
+    allergy = serializers.StringRelatedField()
+
     class Meta:
         model = PatientAllergy
         fields = '__all__'
@@ -37,6 +45,9 @@ class PatientAllergySerializer(serializers.ModelSerializer):
 
 
 class PatientChronicDiseaseSerializer(serializers.ModelSerializer):
+    patient = serializers.StringRelatedField(read_only=True)
+    disease = serializers.StringRelatedField()
+
     class Meta:
         model = PatientChronicDisease
         fields = '__all__'
@@ -44,6 +55,9 @@ class PatientChronicDiseaseSerializer(serializers.ModelSerializer):
 
 
 class PatientSurgerySerializer(serializers.ModelSerializer):
+    patient = serializers.StringRelatedField(read_only=True)
+    surgery = serializers.StringRelatedField()
+
     class Meta:
         model = PatientSurgery
         fields = '__all__'
@@ -51,6 +65,9 @@ class PatientSurgerySerializer(serializers.ModelSerializer):
 
 
 class PatientDisabilitySerializer(serializers.ModelSerializer):
+    patient = serializers.StringRelatedField(read_only=True)
+    disability = serializers.StringRelatedField()
+
     class Meta:
         model = PatientDisability
         fields = '__all__'
@@ -58,6 +75,9 @@ class PatientDisabilitySerializer(serializers.ModelSerializer):
 
 
 class PatientMedicationSerializer(serializers.ModelSerializer):
+    patient = serializers.StringRelatedField(read_only=True)
+    medication = serializers.StringRelatedField()
+
     class Meta:
         model = PatientMedication
         fields = '__all__'

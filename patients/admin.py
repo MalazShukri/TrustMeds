@@ -1,9 +1,5 @@
 from django.contrib import admin
-from .models import (
-    Patient, EmergencyContact, Visit,
-    PatientAllergy, PatientChronicDisease,
-    PatientSurgery, PatientDisability, PatientMedication
-)
+from .models import *
 
 # --- Patient ---
 
@@ -83,3 +79,9 @@ class VisitAdmin(admin.ModelAdmin):
     def get_doctor_name(self, obj):
         return obj.doctor.full_name if obj.doctor else "-"
     get_doctor_name.short_description = 'Doctor'
+
+
+admin.register(Allergy)
+admin.register(ChronicDisease)
+admin.register(Disability)
+admin.register(Surgery)
