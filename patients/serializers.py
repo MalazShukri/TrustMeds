@@ -19,42 +19,49 @@ class EmergencyContactSerializer(serializers.ModelSerializer):
     class Meta:
         model = EmergencyContact
         fields = '__all__'
+        read_only_fields = ['patient']
 
 
 class VisitSerializer(serializers.ModelSerializer):
     class Meta:
         model = Visit
         fields = '__all__'
+        read_only_fields = ['patient']
 
 
 class PatientAllergySerializer(serializers.ModelSerializer):
     class Meta:
         model = PatientAllergy
         fields = '__all__'
+        read_only_fields = ['patient']
 
 
 class PatientChronicDiseaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = PatientChronicDisease
         fields = '__all__'
+        read_only_fields = ['patient']
 
 
 class PatientSurgerySerializer(serializers.ModelSerializer):
     class Meta:
         model = PatientSurgery
         fields = '__all__'
+        read_only_fields = ['patient']
 
 
 class PatientDisabilitySerializer(serializers.ModelSerializer):
     class Meta:
         model = PatientDisability
         fields = '__all__'
+        read_only_fields = ['patient']
 
 
 class PatientMedicationSerializer(serializers.ModelSerializer):
     class Meta:
         model = PatientMedication
         fields = '__all__'
+        read_only_fields = ['patient']
 
 
 class AllergySerializer(serializers.ModelSerializer):

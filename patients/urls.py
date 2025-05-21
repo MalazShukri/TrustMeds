@@ -26,6 +26,8 @@ urlpatterns = [
     path('me/appointments/', PatientAppointmentsView.as_view(),
          name='patient-appointments'),
     path('me/doctors/', PatientDoctorsView.as_view(), name='patient-doctors'),
+    path('create-visit/', CreateVisitView.as_view(), name='create-visit'),
+    path('me/visits/', ListMyVisitsView.as_view(), name='my-visits'),
 
     # === Patient Health Summary Sections ===
     path('me/allergies/', PatientAllergiesView.as_view(), name='patient-allergies'),

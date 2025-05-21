@@ -191,6 +191,23 @@ class PatientDisabilitiesView(APIView):
         return Response(PatientDisabilitySerializer(patient.disabilities.all(), many=True).data)
 
 
+class CreateVisitView(generics.CreateAPIView):
+    serializer_class = VisitSerializer
+    permission_classes = [permissions.IsAuthenticated, IsPatientUser]
+
+    def perform_create(self, serializer):
+        patient = get_object_or_404(Patient, user=self.request.user)
+        serializer.save(patient=patient)
+
+
+class ListMyVisitsView(generics.ListAPIView):
+    serializer_class = VisitSerializer
+    permission_classes = [permissions.IsAuthenticated, IsPatientUser]
+
+    def get_queryset(self):
+        patient = get_object_or_404(Patient, user=self.request.user)
+        return Visit.objects.filter(patient=patient).order_by('-visit_date')
+
 
 # ----------- UPDATE + DELETE VIEWS -----------
 
