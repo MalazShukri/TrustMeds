@@ -3,7 +3,7 @@ from .views import *
 
 urlpatterns = [
     # === Publicly accessible creation endpoints for base models ===
-    path('public/create-patient/',
+    path('create-patient/',
          CreatePatientView.as_view(), name='create-patient'),
     path('public/create-allergy/', CreateAllergyView.as_view(),
          name='create-allergy-base'),

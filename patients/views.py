@@ -23,26 +23,32 @@ class IsPatientUser(permissions.BasePermission):
 
 class CreateAllergyView(generics.CreateAPIView):
     serializer_class = AllergySerializer
-    permission_classes = [permissions.IsAdminUser]
+    permission_classes = [AllowAny]
     queryset = Allergy.objects.all()
 
 
 class CreateChronicDiseaseView(generics.CreateAPIView):
     serializer_class = ChronicDiseaseSerializer
-    permission_classes = [permissions.IsAdminUser]
+    permission_classes = [AllowAny]
     queryset = ChronicDisease.objects.all()
 
 
 class CreateSurgeryView(generics.CreateAPIView):
     serializer_class = SurgerySerializer
-    permission_classes = [permissions.IsAdminUser]
+    permission_classes = [AllowAny]
     queryset = Surgery.objects.all()
 
 
 class CreateDisabilityView(generics.CreateAPIView):
     serializer_class = DisabilitySerializer
-    permission_classes = [permissions.IsAdminUser]
+    permission_classes = [AllowAny]
     queryset = Disability.objects.all()
+
+
+
+
+
+
 
 
 class CreatePatientView(generics.CreateAPIView):
@@ -50,8 +56,7 @@ class CreatePatientView(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated, IsPatientUser]
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)  
-
+        serializer.save(user=self.request.user)
 
 
 
