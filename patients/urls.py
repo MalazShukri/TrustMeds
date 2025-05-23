@@ -19,6 +19,9 @@ urlpatterns = [
     path('me/profile/', PatientProfileView.as_view(), name='patient-profile'),
     path('me/emergency-contact/', PatientEmergencyContactView.as_view(),
          name='patient-emergency-contact'),
+    path('me/update-profile/', UpdatePatientView.as_view(),
+         name='update-patient-profile'),
+
 
     # === Patient Home Sections ===
     path('me/medications/', PatientMedicationsView.as_view(),

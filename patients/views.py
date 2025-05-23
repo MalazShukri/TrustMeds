@@ -47,10 +47,6 @@ class CreateDisabilityView(generics.CreateAPIView):
 
 
 
-
-
-
-
 class CreatePatientView(generics.CreateAPIView):
     serializer_class = PatientSerializer
     permission_classes = [permissions.IsAuthenticated, IsPatientUser]
@@ -218,6 +214,14 @@ class ListMyVisitsView(generics.ListAPIView):
 
 
 # ----------- UPDATE + DELETE VIEWS -----------
+
+class UpdatePatientView(generics.UpdateAPIView):
+    serializer_class = PatientSerializer
+    permission_classes = [permissions.IsAuthenticated, IsPatientUser]
+
+    def get_object(self):
+        return get_object_or_404(Patient, user=self.request.user)
+
 
 class UpdateEmergencyContactView(generics.UpdateAPIView):
     queryset = EmergencyContact.objects.all()

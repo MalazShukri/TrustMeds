@@ -81,7 +81,8 @@ class Visit(models.Model):
 
 
 class Allergy(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
+    name_ar = models.CharField(max_length=255, unique=True)
 
     def __str__(self):
         return self.name
@@ -99,7 +100,8 @@ class PatientAllergy(models.Model):
 
 
 class ChronicDisease(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
+    name_ar = models.CharField(max_length=255, unique=True)
 
     def __str__(self):
         return self.name
@@ -117,7 +119,8 @@ class PatientChronicDisease(models.Model):
 
 
 class Surgery(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
+    name_ar = models.CharField(max_length=255, unique=True)
 
     def __str__(self):
         return self.name
@@ -136,7 +139,8 @@ class PatientSurgery(models.Model):
 
 
 class Disability(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
+    name_ar = models.CharField(max_length=255, unique=True)
 
     def __str__(self):
         return self.name
