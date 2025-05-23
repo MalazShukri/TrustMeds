@@ -81,7 +81,7 @@ class VisitAdmin(admin.ModelAdmin):
     get_doctor_name.short_description = 'Doctor'
 
 
-admin.register(Allergy)
-admin.register(ChronicDisease)
-admin.register(Disability)
-admin.register(Surgery)
+admin.site.register(Allergy)
+admin.site.register(ChronicDisease)
+admin.site.register(Disability)
+admin.site.register(Surgery)
