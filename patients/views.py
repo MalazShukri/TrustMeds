@@ -1,5 +1,5 @@
 # patients/permissions.py
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from doctors.serializers import DoctorSerializer
 from appointments.serializers import AppointmentSerializer
 from appointments.models import Appointment
@@ -45,11 +45,39 @@ class CreateDisabilityView(generics.CreateAPIView):
     queryset = Disability.objects.all()
 
 
+# List views for base models
+class ListAllergiesView(generics.ListAPIView):
+    queryset = Allergy.objects.all()
+    serializer_class = AllergySerializer
+    permission_classes = [AllowAny]
 
+
+class ListChronicDiseasesView(generics.ListAPIView):
+    queryset = ChronicDisease.objects.all()
+    serializer_class = ChronicDiseaseSerializer
+    permission_classes = [AllowAny]
+
+
+class ListSurgeriesView(generics.ListAPIView):
+    queryset = Surgery.objects.all()
+    serializer_class = SurgerySerializer
+    permission_classes = [AllowAny]
+
+
+class ListDisabilitiesView(generics.ListAPIView):
+    queryset = Disability.objects.all()
+    serializer_class = DisabilitySerializer
+    permission_classes = [AllowAny]
+
+
+
+
+
+# =============================================================
 
 class CreatePatientView(generics.CreateAPIView):
     serializer_class = PatientSerializer
-    permission_classes = [permissions.IsAuthenticated, IsPatientUser]
+    permission_classes = [IsAuthenticated, IsPatientUser]
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -59,7 +87,7 @@ class CreatePatientView(generics.CreateAPIView):
 
 class CreateEmergencyContactView(generics.CreateAPIView):
     serializer_class = EmergencyContactSerializer
-    permission_classes = [permissions.IsAuthenticated, IsPatientUser]
+    permission_classes = [IsAuthenticated, IsPatientUser]
 
     def perform_create(self, serializer):
         patient = get_object_or_404(Patient, user=self.request.user)
@@ -68,7 +96,7 @@ class CreateEmergencyContactView(generics.CreateAPIView):
 
 class CreatePatientAllergyView(generics.CreateAPIView):
     serializer_class = PatientAllergySerializer
-    permission_classes = [permissions.IsAuthenticated, IsPatientUser]
+    permission_classes = [IsAuthenticated, IsPatientUser]
 
     def perform_create(self, serializer):
         patient = get_object_or_404(Patient, user=self.request.user)
@@ -77,7 +105,7 @@ class CreatePatientAllergyView(generics.CreateAPIView):
 
 class CreatePatientChronicDiseaseView(generics.CreateAPIView):
     serializer_class = PatientChronicDiseaseSerializer
-    permission_classes = [permissions.IsAuthenticated, IsPatientUser]
+    permission_classes = [IsAuthenticated, IsPatientUser]
 
     def perform_create(self, serializer):
         patient = get_object_or_404(Patient, user=self.request.user)
@@ -86,7 +114,7 @@ class CreatePatientChronicDiseaseView(generics.CreateAPIView):
 
 class CreatePatientSurgeryView(generics.CreateAPIView):
     serializer_class = PatientSurgerySerializer
-    permission_classes = [permissions.IsAuthenticated, IsPatientUser]
+    permission_classes = [IsAuthenticated, IsPatientUser]
 
     def perform_create(self, serializer):
         patient = get_object_or_404(Patient, user=self.request.user)
@@ -95,7 +123,7 @@ class CreatePatientSurgeryView(generics.CreateAPIView):
 
 class CreatePatientDisabilityView(generics.CreateAPIView):
     serializer_class = PatientDisabilitySerializer
-    permission_classes = [permissions.IsAuthenticated, IsPatientUser]
+    permission_classes = [IsAuthenticated, IsPatientUser]
 
     def perform_create(self, serializer):
         patient = get_object_or_404(Patient, user=self.request.user)
@@ -104,7 +132,7 @@ class CreatePatientDisabilityView(generics.CreateAPIView):
 
 class CreatePatientMedicationView(generics.CreateAPIView):
     serializer_class = PatientMedicationSerializer
-    permission_classes = [permissions.IsAuthenticated, IsPatientUser]
+    permission_classes = [IsAuthenticated, IsPatientUser]
 
     def perform_create(self, serializer):
         patient = get_object_or_404(Patient, user=self.request.user)
@@ -114,7 +142,7 @@ class CreatePatientMedicationView(generics.CreateAPIView):
 # === Patient Profile Info ===
 
 class PatientProfileView(APIView):
-    permission_classes = [permissions.IsAuthenticated, IsPatientUser]
+    permission_classes = [IsAuthenticated, IsPatientUser]
 
     def get(self, request):
         patient = get_object_or_404(Patient, user=request.user)
@@ -123,7 +151,7 @@ class PatientProfileView(APIView):
 
 
 class PatientEmergencyContactView(APIView):
-    permission_classes = [permissions.IsAuthenticated, IsPatientUser]
+    permission_classes = [IsAuthenticated, IsPatientUser]
 
     def get(self, request):
         patient = get_object_or_404(Patient, user=request.user)
@@ -135,7 +163,7 @@ class PatientEmergencyContactView(APIView):
 
 
 class PatientMedicationsView(APIView):
-    permission_classes = [permissions.IsAuthenticated, IsPatientUser]
+    permission_classes = [IsAuthenticated, IsPatientUser]
 
     def get(self, request):
         patient = get_object_or_404(Patient, user=request.user)
@@ -144,7 +172,7 @@ class PatientMedicationsView(APIView):
 
 
 class PatientAppointmentsView(APIView):
-    permission_classes = [permissions.IsAuthenticated, IsPatientUser]
+    permission_classes = [IsAuthenticated, IsPatientUser]
 
     def get(self, request):
         patient = get_object_or_404(Patient, user=request.user)
@@ -154,7 +182,7 @@ class PatientAppointmentsView(APIView):
 
 
 class PatientDoctorsView(APIView):
-    permission_classes = [permissions.IsAuthenticated, IsPatientUser]
+    permission_classes = [IsAuthenticated, IsPatientUser]
 
     def get(self, request):
         patient = get_object_or_404(Patient, user=request.user)
@@ -164,7 +192,7 @@ class PatientDoctorsView(APIView):
 
 
 class PatientAllergiesView(APIView):
-    permission_classes = [permissions.IsAuthenticated, IsPatientUser]
+    permission_classes = [IsAuthenticated, IsPatientUser]
 
     def get(self, request):
         patient = get_object_or_404(Patient, user=request.user)
@@ -172,7 +200,7 @@ class PatientAllergiesView(APIView):
 
 
 class PatientChronicDiseasesView(APIView):
-    permission_classes = [permissions.IsAuthenticated, IsPatientUser]
+    permission_classes = [IsAuthenticated, IsPatientUser]
 
     def get(self, request):
         patient = get_object_or_404(Patient, user=request.user)
@@ -180,7 +208,7 @@ class PatientChronicDiseasesView(APIView):
 
 
 class PatientSurgeriesView(APIView):
-    permission_classes = [permissions.IsAuthenticated, IsPatientUser]
+    permission_classes = [IsAuthenticated, IsPatientUser]
 
     def get(self, request):
         patient = get_object_or_404(Patient, user=request.user)
@@ -188,7 +216,7 @@ class PatientSurgeriesView(APIView):
 
 
 class PatientDisabilitiesView(APIView):
-    permission_classes = [permissions.IsAuthenticated, IsPatientUser]
+    permission_classes = [IsAuthenticated, IsPatientUser]
 
     def get(self, request):
         patient = get_object_or_404(Patient, user=request.user)
@@ -197,7 +225,7 @@ class PatientDisabilitiesView(APIView):
 
 class CreateVisitView(generics.CreateAPIView):
     serializer_class = VisitSerializer
-    permission_classes = [permissions.IsAuthenticated, IsPatientUser]
+    permission_classes = [IsAuthenticated, IsPatientUser]
 
     def perform_create(self, serializer):
         patient = get_object_or_404(Patient, user=self.request.user)
@@ -206,7 +234,7 @@ class CreateVisitView(generics.CreateAPIView):
 
 class ListMyVisitsView(generics.ListAPIView):
     serializer_class = VisitSerializer
-    permission_classes = [permissions.IsAuthenticated, IsPatientUser]
+    permission_classes = [IsAuthenticated, IsPatientUser]
 
     def get_queryset(self):
         patient = get_object_or_404(Patient, user=self.request.user)
@@ -217,7 +245,7 @@ class ListMyVisitsView(generics.ListAPIView):
 
 class UpdatePatientView(generics.UpdateAPIView):
     serializer_class = PatientSerializer
-    permission_classes = [permissions.IsAuthenticated, IsPatientUser]
+    permission_classes = [IsAuthenticated, IsPatientUser]
 
     def get_object(self):
         return get_object_or_404(Patient, user=self.request.user)
@@ -226,70 +254,70 @@ class UpdatePatientView(generics.UpdateAPIView):
 class UpdateEmergencyContactView(generics.UpdateAPIView):
     queryset = EmergencyContact.objects.all()
     serializer_class = EmergencyContactSerializer
-    permission_classes = [permissions.IsAuthenticated, IsPatientUser]
+    permission_classes = [IsAuthenticated, IsPatientUser]
 
 
 class DeleteEmergencyContactView(generics.DestroyAPIView):
     queryset = EmergencyContact.objects.all()
     serializer_class = EmergencyContactSerializer
-    permission_classes = [permissions.IsAuthenticated, IsPatientUser]
+    permission_classes = [IsAuthenticated, IsPatientUser]
 
 
 class UpdatePatientAllergyView(generics.UpdateAPIView):
     queryset = PatientAllergy.objects.all()
     serializer_class = PatientAllergySerializer
-    permission_classes = [permissions.IsAuthenticated, IsPatientUser]
+    permission_classes = [IsAuthenticated, IsPatientUser]
 
 
 class DeletePatientAllergyView(generics.DestroyAPIView):
     queryset = PatientAllergy.objects.all()
     serializer_class = PatientAllergySerializer
-    permission_classes = [permissions.IsAuthenticated, IsPatientUser]
+    permission_classes = [IsAuthenticated, IsPatientUser]
 
 
 class UpdatePatientChronicDiseaseView(generics.UpdateAPIView):
     queryset = PatientChronicDisease.objects.all()
     serializer_class = PatientChronicDiseaseSerializer
-    permission_classes = [permissions.IsAuthenticated, IsPatientUser]
+    permission_classes = [IsAuthenticated, IsPatientUser]
 
 
 class DeletePatientChronicDiseaseView(generics.DestroyAPIView):
     queryset = PatientChronicDisease.objects.all()
     serializer_class = PatientChronicDiseaseSerializer
-    permission_classes = [permissions.IsAuthenticated, IsPatientUser]
+    permission_classes = [IsAuthenticated, IsPatientUser]
 
 
 class UpdatePatientSurgeryView(generics.UpdateAPIView):
     queryset = PatientSurgery.objects.all()
     serializer_class = PatientSurgerySerializer
-    permission_classes = [permissions.IsAuthenticated, IsPatientUser]
+    permission_classes = [IsAuthenticated, IsPatientUser]
 
 
 class DeletePatientSurgeryView(generics.DestroyAPIView):
     queryset = PatientSurgery.objects.all()
     serializer_class = PatientSurgerySerializer
-    permission_classes = [permissions.IsAuthenticated, IsPatientUser]
+    permission_classes = [IsAuthenticated, IsPatientUser]
 
 
 class UpdatePatientDisabilityView(generics.UpdateAPIView):
     queryset = PatientDisability.objects.all()
     serializer_class = PatientDisabilitySerializer
-    permission_classes = [permissions.IsAuthenticated, IsPatientUser]
+    permission_classes = [IsAuthenticated, IsPatientUser]
 
 
 class DeletePatientDisabilityView(generics.DestroyAPIView):
     queryset = PatientDisability.objects.all()
     serializer_class = PatientDisabilitySerializer
-    permission_classes = [permissions.IsAuthenticated, IsPatientUser]
+    permission_classes = [IsAuthenticated, IsPatientUser]
 
 
 class UpdatePatientMedicationView(generics.UpdateAPIView):
     queryset = PatientMedication.objects.all()
     serializer_class = PatientMedicationSerializer
-    permission_classes = [permissions.IsAuthenticated, IsPatientUser]
+    permission_classes = [IsAuthenticated, IsPatientUser]
 
 
 class DeletePatientMedicationView(generics.DestroyAPIView):
     queryset = PatientMedication.objects.all()
     serializer_class = PatientMedicationSerializer
-    permission_classes = [permissions.IsAuthenticated, IsPatientUser]
+    permission_classes = [IsAuthenticated, IsPatientUser]

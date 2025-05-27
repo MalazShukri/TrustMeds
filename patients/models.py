@@ -89,14 +89,26 @@ class Allergy(models.Model):
 
 
 class PatientAllergy(models.Model):
+    SEVERITY_CHOICES = [
+        ('low', 'Low'),
+        ('moderate', 'Moderate'),
+        ('high', 'High'),
+        ('severe', 'Severe'),
+    ]
+
     patient = models.ForeignKey(
         'patients.Patient', on_delete=models.CASCADE, related_name='allergies')
     allergy = models.ForeignKey('Allergy', on_delete=models.CASCADE)
+    severity = models.CharField(
+        max_length=10, choices=SEVERITY_CHOICES, default='low')
+    diagnosed_date = models.DateField(null=True, blank=True)
+    reaction = models.TextField(blank=True)
     notes = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.patient.first_name} - {self.allergy.name}"
+
 
 
 class ChronicDisease(models.Model):
