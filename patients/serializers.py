@@ -27,7 +27,6 @@ class EmergencyContactSerializer(serializers.ModelSerializer):
 
 class VisitSerializer(serializers.ModelSerializer):
     patient = serializers.StringRelatedField(read_only=True)
-    doctor = serializers.StringRelatedField()
 
     class Meta:
         model = Visit
@@ -37,52 +36,61 @@ class VisitSerializer(serializers.ModelSerializer):
 
 class PatientAllergySerializer(serializers.ModelSerializer):
     patient = serializers.StringRelatedField(read_only=True)
-    allergy = serializers.StringRelatedField()
-
+    allergy_name = serializers.SerializerMethodField()
     class Meta:
         model = PatientAllergy
         fields = '__all__'
         read_only_fields = ['patient']
 
+    def get_allergy_name(self, obj):
+        return str(obj.allergy)
+
 
 class PatientChronicDiseaseSerializer(serializers.ModelSerializer):
     patient = serializers.StringRelatedField(read_only=True)
-    disease = serializers.StringRelatedField()
-
+    disease_name = serializers.SerializerMethodField()
     class Meta:
         model = PatientChronicDisease
         fields = '__all__'
         read_only_fields = ['patient']
 
+    def get_disease_name(self, obj):
+        return str(obj.disease)
+
 
 class PatientSurgerySerializer(serializers.ModelSerializer):
     patient = serializers.StringRelatedField(read_only=True)
-    surgery = serializers.StringRelatedField()
-
+    surgery_name = serializers.SerializerMethodField()
     class Meta:
         model = PatientSurgery
         fields = '__all__'
         read_only_fields = ['patient']
 
-
+    def get_surgery_name(self, obj):
+        return str(obj.surgery)
+    
 class PatientDisabilitySerializer(serializers.ModelSerializer):
     patient = serializers.StringRelatedField(read_only=True)
-    disability = serializers.StringRelatedField()
-
+    disability_name = serializers.SerializerMethodField()
     class Meta:
         model = PatientDisability
         fields = '__all__'
         read_only_fields = ['patient']
 
+    def get_disability_name(self, obj):
+        return str(obj.disability)
+    
 
 class PatientMedicationSerializer(serializers.ModelSerializer):
     patient = serializers.StringRelatedField(read_only=True)
-    medication = serializers.StringRelatedField()
-
+    medication_name = serializers.SerializerMethodField()
     class Meta:
         model = PatientMedication
         fields = '__all__'
         read_only_fields = ['patient']
+        
+    def get_medication_name(self, obj):
+        return str(obj.medication)
 
 
 class AllergySerializer(serializers.ModelSerializer):
