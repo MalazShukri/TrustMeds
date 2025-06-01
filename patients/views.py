@@ -177,7 +177,7 @@ class PatientAppointmentsView(APIView):
     def get(self, request):
         patient = get_object_or_404(Patient, user=request.user)
         appointments = Appointment.objects.filter(
-            patient=patient, status='approved').order_by('date', 'time')
+            patient=patient).order_by('date', 'time')
         return Response(AppointmentSerializer(appointments, many=True).data)
 
 
