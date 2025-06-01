@@ -36,7 +36,7 @@ class Doctor(models.Model):
         return f"{self.first_name} {self.last_name}"
 
     def __str__(self):
-        return f"Dr. {self.full_name} ({self.specialization})"
+        return f"Dr. {self.full_name()} ({self.specialization})"
 
 
 class DoctorSchedule(models.Model):

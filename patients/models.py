@@ -129,8 +129,7 @@ class PatientChronicDisease(models.Model):
     patient = models.ForeignKey(
         'patients.Patient', on_delete=models.CASCADE, related_name='chronic_diseases')
     disease = models.ForeignKey('ChronicDisease', on_delete=models.CASCADE)
-    doctor = models.ForeignKey(
-        'doctors.Doctor', on_delete=models.SET_NULL, null=True, blank=True)
+    doctor = models.CharField(max_length=55, null=True, blank=True)
     notes = models.TextField(blank=True)
     status = models.CharField(
         max_length=20,
@@ -154,8 +153,7 @@ class Surgery(models.Model):
 class PatientSurgery(models.Model):
     patient = models.ForeignKey(
         'patients.Patient', on_delete=models.CASCADE, related_name='surgeries')
-    doctor = models.ForeignKey(
-        'doctors.Doctor', on_delete=models.SET_NULL, null=True, blank=True)
+    doctor = models.CharField(max_length=55, null=True, blank=True)
     surgery = models.ForeignKey('Surgery', on_delete=models.CASCADE)
     provider = models.CharField(max_length=255, blank=True)
     date = models.DateField(null=True, blank=True)
