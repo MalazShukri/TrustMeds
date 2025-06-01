@@ -97,4 +97,18 @@ urlpatterns = [
          UpdatePatientMedicationView.as_view(), name='update-medication'),
     path('delete-medication/<int:pk>/',
          DeletePatientMedicationView.as_view(), name='delete-medication'),
+    
+    
+    # === Appointment Management ===
+    path('create-appointment/', CreateAppointmentView.as_view(),
+         name='create-appointment'),
+#     path('update-appointment/<int:pk>/',
+#          UpdateAppointmentView.as_view(), name='update-appointment'),
+#     path('delete-appointment/<int:pk>/',
+#          DeleteAppointmentView.as_view(), name='delete-appointment'),
+
+    # === Visit Management ===
+#     path('update-visit/<int:pk>/', UpdateVisitView.as_view(), name='update-visit'),
+#     path('delete-visit/<int:pk>/', DeleteVisitView.as_view(), name='delete-visit'),
+
 ]
