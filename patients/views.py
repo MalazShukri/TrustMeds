@@ -11,6 +11,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import generics, permissions
 from rest_framework import permissions
+from rest_framework.exceptions import NotFound
 
 
 class IsPatientUser(permissions.BasePermission):
@@ -252,6 +253,17 @@ class ListMyVisitsView(generics.ListAPIView):
 
 
 # ----------- UPDATE + DELETE VIEWS -----------
+
+class UpdatePatientView(generics.RetrieveUpdateAPIView):
+    serializer_class = PatientSerializer
+    # Assuming IsPatientUser is custom
+    permission_classes = [IsAuthenticated, IsPatientUser]
+
+    def get_object(self):
+        try:
+            return Patient.objects.get(user=self.request.user)
+        except Patient.DoesNotExist:
+            raise NotFound("Patient profile not found.")
 
 # === Emergency Contact ===
 class UpdateEmergencyContactView(generics.UpdateAPIView):
