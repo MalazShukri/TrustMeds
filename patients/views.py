@@ -1,5 +1,5 @@
 # patients/permissions.py
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
 from doctors.serializers import DoctorSerializer
 from appointments.serializers import AppointmentSerializer
 from appointments.models import Appointment
@@ -20,61 +20,23 @@ class IsPatientUser(permissions.BasePermission):
 
 
 # ========== PUBLICALLY ACCESSIBLE CREATION VIEWS FOR BASE MODELS ==========
-
-
 class CreateAllergyView(generics.CreateAPIView):
     serializer_class = AllergySerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated, IsPatientUser]
     queryset = Allergy.objects.all()
-
-
-class CreateChronicDiseaseView(generics.CreateAPIView):
-    serializer_class = ChronicDiseaseSerializer
-    permission_classes = [AllowAny]
-    queryset = ChronicDisease.objects.all()
-
-
-class CreateSurgeryView(generics.CreateAPIView):
-    serializer_class = SurgerySerializer
-    permission_classes = [AllowAny]
-    queryset = Surgery.objects.all()
-
-
-class CreateDisabilityView(generics.CreateAPIView):
-    serializer_class = DisabilitySerializer
-    permission_classes = [AllowAny]
-    queryset = Disability.objects.all()
 
 
 # List views for base models
 class ListAllergiesView(generics.ListAPIView):
     queryset = Allergy.objects.all()
     serializer_class = AllergySerializer
-    permission_classes = [AllowAny]
-
-
-class ListChronicDiseasesView(generics.ListAPIView):
-    queryset = ChronicDisease.objects.all()
-    serializer_class = ChronicDiseaseSerializer
-    permission_classes = [AllowAny]
-
-
-class ListSurgeriesView(generics.ListAPIView):
-    queryset = Surgery.objects.all()
-    serializer_class = SurgerySerializer
-    permission_classes = [AllowAny]
-
-
-class ListDisabilitiesView(generics.ListAPIView):
-    queryset = Disability.objects.all()
-    serializer_class = DisabilitySerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated, IsPatientUser]
 
 
 
 
 
-# =============================================================
+# ===================== Create Patient Info ========================================
 
 class CreatePatientView(generics.CreateAPIView):
     serializer_class = PatientSerializer
@@ -84,7 +46,31 @@ class CreatePatientView(generics.CreateAPIView):
         serializer.save(user=self.request.user)
 
 
+class CreateChronicDiseaseView(generics.CreateAPIView):
+    serializer_class = ChronicDiseaseSerializer
+    permission_classes = [IsAuthenticated, IsPatientUser]
 
+    def perform_create(self, serializer):
+        patient = get_object_or_404(Patient, user=self.request.user)
+        serializer.save(patient=patient)
+
+
+class CreateSurgeryView(generics.CreateAPIView):
+    serializer_class = SurgerySerializer
+    permission_classes = [IsAuthenticated, IsPatientUser]
+
+    def perform_create(self, serializer):
+        patient = get_object_or_404(Patient, user=self.request.user)
+        serializer.save(patient=patient)
+
+
+class CreateDisabilityView(generics.CreateAPIView):
+    serializer_class = DisabilitySerializer
+    permission_classes = [IsAuthenticated, IsPatientUser]
+
+    def perform_create(self, serializer):
+        patient = get_object_or_404(Patient, user=self.request.user)
+        serializer.save(patient=patient)
 
 class CreateEmergencyContactView(generics.CreateAPIView):
     serializer_class = EmergencyContactSerializer
@@ -97,33 +83,6 @@ class CreateEmergencyContactView(generics.CreateAPIView):
 
 class CreatePatientAllergyView(generics.CreateAPIView):
     serializer_class = PatientAllergySerializer
-    permission_classes = [IsAuthenticated, IsPatientUser]
-
-    def perform_create(self, serializer):
-        patient = get_object_or_404(Patient, user=self.request.user)
-        serializer.save(patient=patient)
-
-
-class CreatePatientChronicDiseaseView(generics.CreateAPIView):
-    serializer_class = PatientChronicDiseaseSerializer
-    permission_classes = [IsAuthenticated, IsPatientUser]
-
-    def perform_create(self, serializer):
-        patient = get_object_or_404(Patient, user=self.request.user)
-        serializer.save(patient=patient)
-
-
-class CreatePatientSurgeryView(generics.CreateAPIView):
-    serializer_class = PatientSurgerySerializer
-    permission_classes = [IsAuthenticated, IsPatientUser]
-
-    def perform_create(self, serializer):
-        patient = get_object_or_404(Patient, user=self.request.user)
-        serializer.save(patient=patient)
-
-
-class CreatePatientDisabilityView(generics.CreateAPIView):
-    serializer_class = PatientDisabilitySerializer
     permission_classes = [IsAuthenticated, IsPatientUser]
 
     def perform_create(self, serializer):
@@ -148,9 +107,20 @@ class CreateAppointmentView(generics.CreateAPIView):
         patient = get_object_or_404(Patient, user=self.request.user)
         serializer.save(patient=patient)
         
+
+class CreateVisitView(generics.CreateAPIView):
+    serializer_class = VisitSerializer
+    permission_classes = [IsAuthenticated, IsPatientUser]
+
+    def perform_create(self, serializer):
+        patient = get_object_or_404(Patient, user=self.request.user)
+        serializer.save(patient=patient)
         
         
-# === Patient Profile Info ===
+        
+        
+        
+# === List Patient Profile Info ===
 
 class PatientProfileView(APIView):
     permission_classes = [IsAuthenticated, IsPatientUser]
@@ -182,6 +152,30 @@ class PatientMedicationsView(APIView):
         return Response(PatientMedicationSerializer(medications, many=True).data)
 
 
+class ChronicDiseasesView(APIView):
+    permission_classes = [IsAuthenticated, IsPatientUser]
+
+    def get(self, request):
+        patient = get_object_or_404(Patient, user=request.user)
+        return Response(ChronicDiseaseSerializer(patient.chronic_diseases.all(), many=True).data)
+
+
+class SurgeriesView(APIView):
+    permission_classes = [IsAuthenticated, IsPatientUser]
+
+    def get(self, request):
+        patient = get_object_or_404(Patient, user=request.user)
+        return Response(SurgerySerializer(patient.surgeries.all(), many=True).data)
+    
+
+class DisabilitiesView(APIView):
+    permission_classes = [IsAuthenticated, IsPatientUser]
+
+    def get(self, request):
+        patient = get_object_or_404(Patient, user=request.user)
+        return Response(DisabilitySerializer(patient.disabilities.all(), many=True).data)
+
+
 class PatientAppointmentsView(APIView):
     permission_classes = [IsAuthenticated, IsPatientUser]
 
@@ -210,40 +204,8 @@ class PatientAllergiesView(APIView):
         return Response(PatientAllergySerializer(patient.allergies.all(), many=True).data)
 
 
-class PatientChronicDiseasesView(APIView):
-    permission_classes = [IsAuthenticated, IsPatientUser]
 
-    def get(self, request):
-        patient = get_object_or_404(Patient, user=request.user)
-        return Response(PatientChronicDiseaseSerializer(patient.chronic_diseases.all(), many=True).data)
-
-
-class PatientSurgeriesView(APIView):
-    permission_classes = [IsAuthenticated, IsPatientUser]
-
-    def get(self, request):
-        patient = get_object_or_404(Patient, user=request.user)
-        return Response(PatientSurgerySerializer(patient.surgeries.all(), many=True).data)
-
-
-class PatientDisabilitiesView(APIView):
-    permission_classes = [IsAuthenticated, IsPatientUser]
-
-    def get(self, request):
-        patient = get_object_or_404(Patient, user=request.user)
-        return Response(PatientDisabilitySerializer(patient.disabilities.all(), many=True).data)
-
-
-class CreateVisitView(generics.CreateAPIView):
-    serializer_class = VisitSerializer
-    permission_classes = [IsAuthenticated, IsPatientUser]
-
-    def perform_create(self, serializer):
-        patient = get_object_or_404(Patient, user=self.request.user)
-        serializer.save(patient=patient)
-
-
-class ListMyVisitsView(generics.ListAPIView):
+class PatientVisitsView(generics.ListAPIView):
     serializer_class = VisitSerializer
     permission_classes = [IsAuthenticated, IsPatientUser]
 
@@ -264,6 +226,8 @@ class UpdatePatientView(generics.RetrieveUpdateAPIView):
             return Patient.objects.get(user=self.request.user)
         except Patient.DoesNotExist:
             raise NotFound("Patient profile not found.")
+
+
 
 # === Emergency Contact ===
 class UpdateEmergencyContactView(generics.UpdateAPIView):
@@ -304,60 +268,60 @@ class DeletePatientAllergyView(generics.DestroyAPIView):
 
 
 # === Chronic Disease ===
-class UpdatePatientChronicDiseaseView(generics.UpdateAPIView):
-    serializer_class = PatientChronicDiseaseSerializer
+class UpdateChronicDiseaseView(generics.UpdateAPIView):
+    serializer_class = ChronicDiseaseSerializer
     permission_classes = [IsAuthenticated, IsPatientUser]
 
     def get_queryset(self):
         patient = get_object_or_404(Patient, user=self.request.user)
-        return PatientChronicDisease.objects.filter(patient=patient)
+        return ChronicDisease.objects.filter(patient=patient)
 
 
-class DeletePatientChronicDiseaseView(generics.DestroyAPIView):
-    serializer_class = PatientChronicDiseaseSerializer
+class DeleteChronicDiseaseView(generics.DestroyAPIView):
+    serializer_class = ChronicDiseaseSerializer
     permission_classes = [IsAuthenticated, IsPatientUser]
 
     def get_queryset(self):
         patient = get_object_or_404(Patient, user=self.request.user)
-        return PatientChronicDisease.objects.filter(patient=patient)
+        return ChronicDisease.objects.filter(patient=patient)
 
 
 # === Surgery ===
-class UpdatePatientSurgeryView(generics.UpdateAPIView):
-    serializer_class = PatientSurgerySerializer
+class UpdateSurgeryView(generics.UpdateAPIView):
+    serializer_class = SurgerySerializer
     permission_classes = [IsAuthenticated, IsPatientUser]
 
     def get_queryset(self):
         patient = get_object_or_404(Patient, user=self.request.user)
-        return PatientSurgery.objects.filter(patient=patient)
+        return Surgery.objects.filter(patient=patient)
 
 
-class DeletePatientSurgeryView(generics.DestroyAPIView):
-    serializer_class = PatientSurgerySerializer
+class DeleteSurgeryView(generics.DestroyAPIView):
+    serializer_class = SurgerySerializer
     permission_classes = [IsAuthenticated, IsPatientUser]
 
     def get_queryset(self):
         patient = get_object_or_404(Patient, user=self.request.user)
-        return PatientSurgery.objects.filter(patient=patient)
+        return Surgery.objects.filter(patient=patient)
 
 
 # === Disability ===
-class UpdatePatientDisabilityView(generics.UpdateAPIView):
-    serializer_class = PatientDisabilitySerializer
+class UpdateDisabilityView(generics.UpdateAPIView):
+    serializer_class = DisabilitySerializer
     permission_classes = [IsAuthenticated, IsPatientUser]
 
     def get_queryset(self):
         patient = get_object_or_404(Patient, user=self.request.user)
-        return PatientDisability.objects.filter(patient=patient)
+        return Disability.objects.filter(patient=patient)
 
 
-class DeletePatientDisabilityView(generics.DestroyAPIView):
-    serializer_class = PatientDisabilitySerializer
+class DeleteDisabilityView(generics.DestroyAPIView):
+    serializer_class = DisabilitySerializer
     permission_classes = [IsAuthenticated, IsPatientUser]
 
     def get_queryset(self):
         patient = get_object_or_404(Patient, user=self.request.user)
-        return PatientDisability.objects.filter(patient=patient)
+        return Disability.objects.filter(patient=patient)
 
 
 # === Medication ===

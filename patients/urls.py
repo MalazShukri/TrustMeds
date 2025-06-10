@@ -5,20 +5,10 @@ urlpatterns = [
     # === Publicly accessible creation endpoints for base models ==
     path('public/create-allergy/', CreateAllergyView.as_view(),
          name='create-allergy-base'),
-    path('public/create-chronic-disease/',
-         CreateChronicDiseaseView.as_view(), name='create-chronic-disease-base'),
-    path('public/create-surgery/', CreateSurgeryView.as_view(),
-         name='create-surgery-base'),
-    path('public/create-disability/', CreateDisabilityView.as_view(),
-         name='create-disability-base'),
-    
+
     # === Public GET list endpoints for base models ===
     path('public/allergies/', ListAllergiesView.as_view(), name='list-allergies'),
-    path('public/chronic-diseases/', ListChronicDiseasesView.as_view(),
-         name='list-chronic-diseases'),
-    path('public/surgeries/', ListSurgeriesView.as_view(), name='list-surgeries'),
-    path('public/disabilities/', ListDisabilitiesView.as_view(),
-         name='list-disabilities'),
+
 
 
 
@@ -39,14 +29,14 @@ urlpatterns = [
          name='patient-appointments'),
     path('me/doctors/', PatientDoctorsView.as_view(), name='patient-doctors'),
     path('create-visit/', CreateVisitView.as_view(), name='create-visit'),
-    path('me/visits/', ListMyVisitsView.as_view(), name='my-visits'),
+    path('me/visits/', PatientVisitsView.as_view(), name='my-visits'),
 
     # === Patient Health Summary Sections ===
     path('me/allergies/', PatientAllergiesView.as_view(), name='patient-allergies'),
-    path('me/chronic-diseases/', PatientChronicDiseasesView.as_view(),
+    path('me/chronic-diseases/', ChronicDiseasesView.as_view(),
          name='patient-chronic-diseases'),
-    path('me/surgeries/', PatientSurgeriesView.as_view(), name='patient-surgeries'),
-    path('me/disabilities/', PatientDisabilitiesView.as_view(),
+    path('me/surgeries/', SurgeriesView.as_view(), name='patient-surgeries'),
+    path('me/disabilities/', DisabilitiesView.as_view(),
          name='patient-disabilities'),
 
 
@@ -67,28 +57,28 @@ urlpatterns = [
          DeletePatientAllergyView.as_view(), name='delete-allergy'),
 
     # === Chronic Disease ===
-    path('create-chronic-disease/', CreatePatientChronicDiseaseView.as_view(),
-         name='create-chronic-disease'),
+    path('create-chronic-disease/',
+         CreateChronicDiseaseView.as_view(), name='create-chronic-disease'),
     path('update-chronic-disease/<int:pk>/',
-         UpdatePatientChronicDiseaseView.as_view(), name='update-chronic-disease'),
+         UpdateChronicDiseaseView.as_view(), name='update-chronic-disease'),
     path('delete-chronic-disease/<int:pk>/',
-         DeletePatientChronicDiseaseView.as_view(), name='delete-chronic-disease'),
+         DeleteChronicDiseaseView.as_view(), name='delete-chronic-disease'),
 
     # === Surgery ===
-    path('create-surgery/', CreatePatientSurgeryView.as_view(),
+    path('create-surgery/', CreateSurgeryView.as_view(),
          name='create-surgery'),
     path('update-surgery/<int:pk>/',
-         UpdatePatientSurgeryView.as_view(), name='update-surgery'),
+         UpdateSurgeryView.as_view(), name='update-surgery'),
     path('delete-surgery/<int:pk>/',
-         DeletePatientSurgeryView.as_view(), name='delete-surgery'),
+         DeleteSurgeryView.as_view(), name='delete-surgery'),
 
     # === Disability ===
-    path('create-disability/', CreatePatientDisabilityView.as_view(),
+    path('create-disability/', CreateDisabilityView.as_view(),
          name='create-disability'),
     path('update-disability/<int:pk>/',
-         UpdatePatientDisabilityView.as_view(), name='update-disability'),
+         UpdateDisabilityView.as_view(), name='update-disability'),
     path('delete-disability/<int:pk>/',
-         DeletePatientDisabilityView.as_view(), name='delete-disability'),
+         DeleteDisabilityView.as_view(), name='delete-disability'),
 
     # === Medication ===
     path('create-medication/', CreatePatientMedicationView.as_view(),

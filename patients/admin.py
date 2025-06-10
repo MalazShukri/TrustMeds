@@ -29,33 +29,33 @@ class PatientAllergyAdmin(admin.ModelAdmin):
 
 
 # --- Patient Chronic Disease ---
-@admin.register(PatientChronicDisease)
+@admin.register(ChronicDisease)
 class PatientChronicDiseaseAdmin(admin.ModelAdmin):
     list_display = ('id', 'patient', 'get_disease_name', 'notes')
 
     def get_disease_name(self, obj):
-        return obj.disease.name
+        return obj.name
     get_disease_name.short_description = 'Disease'
 
 
 # --- Patient Surgery ---
-@admin.register(PatientSurgery)
+@admin.register(Surgery)
 class PatientSurgeryAdmin(admin.ModelAdmin):
     list_display = ('id', 'patient', 'get_surgery_name', 'date', 'notes')
     list_filter = ('date',)
 
     def get_surgery_name(self, obj):
-        return obj.surgery.name
+        return obj.name
     get_surgery_name.short_description = 'Surgery'
 
 
 # --- Patient Disability ---
-@admin.register(PatientDisability)
+@admin.register(Disability)
 class PatientDisabilityAdmin(admin.ModelAdmin):
     list_display = ('id', 'patient', 'get_disability_name', 'notes')
 
     def get_disability_name(self, obj):
-        return obj.disability.name
+        return obj.name
     get_disability_name.short_description = 'Disability'
 
 
@@ -81,7 +81,7 @@ class VisitAdmin(admin.ModelAdmin):
     get_doctor_name.short_description = 'Doctor'
 
 
-admin.site.register(Allergy)
-admin.site.register(ChronicDisease)
-admin.site.register(Disability)
-admin.site.register(Surgery)
+# admin.site.register(Allergy)
+# admin.site.register(ChronicDisease)
+# admin.site.register(Disability)
+# admin.site.register(Surgery)

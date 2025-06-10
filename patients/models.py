@@ -110,25 +110,16 @@ class PatientAllergy(models.Model):
         return f"{self.patient.first_name} - {self.allergy.name}"
 
 
-
 class ChronicDisease(models.Model):
-    name = models.CharField(max_length=255, unique=True)
-    name_ar = models.CharField(max_length=255, unique=True, null=True)
-
-    def __str__(self):
-        return self.name
-
-
-class PatientChronicDisease(models.Model):
     STATUS_CHOICES = [
         ('active', 'Active'),
         ('inactive', 'Inactive'),
         ('resolved', 'Resolved'),
         ('unknown', 'Unknown'),
     ]
-    patient = models.ForeignKey(
-        'patients.Patient', on_delete=models.CASCADE, related_name='chronic_diseases')
-    disease = models.ForeignKey('ChronicDisease', on_delete=models.CASCADE)
+
+    name = models.CharField(max_length=255, unique=True)
+    name_ar = models.CharField(max_length=255, unique=True, null=True)
     doctor = models.CharField(max_length=55, null=True, blank=True)
     notes = models.TextField(blank=True)
     status = models.CharField(
@@ -138,49 +129,48 @@ class PatientChronicDisease(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
 
+    patient = models.ForeignKey(
+        'patients.Patient',
+        on_delete=models.CASCADE,
+        related_name='chronic_diseases'
+    )
+
     def __str__(self):
-        return f"{self.patient.first_name} - {self.disease.name}"
+        return f"{self.patient.first_name} - {self.name}"
 
-
+    
+    
 class Surgery(models.Model):
     name = models.CharField(max_length=255, unique=True)
     name_ar = models.CharField(max_length=255, unique=True, null=True)
-
-    def __str__(self):
-        return self.name
-
-
-class PatientSurgery(models.Model):
-    patient = models.ForeignKey(
-        'patients.Patient', on_delete=models.CASCADE, related_name='surgeries')
-    doctor = models.CharField(max_length=55, null=True, blank=True)
-    surgery = models.ForeignKey('Surgery', on_delete=models.CASCADE)
     provider = models.CharField(max_length=255, blank=True)
     date = models.DateField(null=True, blank=True)
     notes = models.TextField(blank=True)
+    doctor = models.CharField(max_length=55, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    patient = models.ForeignKey(
+        'patients.Patient',
+        on_delete=models.CASCADE,
+        related_name='surgeries'
+    )
+
     def __str__(self):
-        return f"{self.patient.first_name} - {self.surgery.name}"
+        return f"{self.patient.first_name} - {self.name}"
+
 
 
 class Disability(models.Model):
     name = models.CharField(max_length=255, unique=True)
     name_ar = models.CharField(max_length=255, unique=True, null=True)
-
-    def __str__(self):
-        return self.name
-
-
-class PatientDisability(models.Model):
     patient = models.ForeignKey(
         'patients.Patient', on_delete=models.CASCADE, related_name='disabilities')
-    disability = models.ForeignKey('Disability', on_delete=models.CASCADE)
     notes = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.patient.first_name} - {self.disability.name}"
+        return f"{self.patient.first_name} - {self.name}"
+
 
 
 class PatientMedication(models.Model):

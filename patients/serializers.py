@@ -2,9 +2,9 @@ from rest_framework import serializers
 from .models import (
     Patient, EmergencyContact, Visit,
     Allergy, PatientAllergy,
-    ChronicDisease, PatientChronicDisease,
-    Surgery, PatientSurgery,
-    Disability, PatientDisability,
+    ChronicDisease,
+    Surgery,
+    Disability,
     PatientMedication
 )
 
@@ -46,11 +46,11 @@ class PatientAllergySerializer(serializers.ModelSerializer):
         return str(obj.allergy)
 
 
-class PatientChronicDiseaseSerializer(serializers.ModelSerializer):
+class ChronicDiseaseSerializer(serializers.ModelSerializer):
     patient = serializers.StringRelatedField(read_only=True)
     disease_name = serializers.SerializerMethodField()
     class Meta:
-        model = PatientChronicDisease
+        model = ChronicDisease
         fields = '__all__'
         read_only_fields = ['patient']
 
@@ -58,22 +58,22 @@ class PatientChronicDiseaseSerializer(serializers.ModelSerializer):
         return str(obj.disease)
 
 
-class PatientSurgerySerializer(serializers.ModelSerializer):
+class SurgerySerializer(serializers.ModelSerializer):
     patient = serializers.StringRelatedField(read_only=True)
     surgery_name = serializers.SerializerMethodField()
     class Meta:
-        model = PatientSurgery
+        model = Surgery
         fields = '__all__'
         read_only_fields = ['patient']
 
     def get_surgery_name(self, obj):
         return str(obj.surgery)
     
-class PatientDisabilitySerializer(serializers.ModelSerializer):
+class DisabilitySerializer(serializers.ModelSerializer):
     patient = serializers.StringRelatedField(read_only=True)
     disability_name = serializers.SerializerMethodField()
     class Meta:
-        model = PatientDisability
+        model = Disability
         fields = '__all__'
         read_only_fields = ['patient']
 
@@ -96,22 +96,4 @@ class PatientMedicationSerializer(serializers.ModelSerializer):
 class AllergySerializer(serializers.ModelSerializer):
     class Meta:
         model = Allergy
-        fields = '__all__'
-
-
-class ChronicDiseaseSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ChronicDisease
-        fields = '__all__'
-
-
-class SurgerySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Surgery
-        fields = '__all__'
-
-
-class DisabilitySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Disability
         fields = '__all__'
