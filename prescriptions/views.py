@@ -1,84 +1,116 @@
 from rest_framework import generics, permissions
-from .models import Prescription, PrescriptionMedication, Medication
-from .serializers import PrescriptionSerializer, PrescriptionMedicationSerializer, MedicationSerializer
-
-# Medications API's
-class MedicationCreateView(generics.CreateAPIView):
-    queryset = Medication.objects.all()
-    serializer_class = MedicationSerializer
-
-
-class MedicationListView(generics.ListAPIView):
-    queryset = Medication.objects.all()
-    serializer_class = MedicationSerializer
-
-
-class MedicationDetailView(generics.RetrieveAPIView):
-    queryset = Medication.objects.all()
-    serializer_class = MedicationSerializer
-
-
-class MedicationUpdateView(generics.UpdateAPIView):
-    queryset = Medication.objects.all()
-    serializer_class = MedicationSerializer
-
-
-class MedicationDeleteView(generics.DestroyAPIView):
-    queryset = Medication.objects.all()
-    serializer_class = MedicationSerializer
+from .models import Prescription, Medication
+from .serializers import PrescriptionSerializer, MedicationSerializer
+from rest_framework.exceptions import ValidationError
 
 
 
+class IsDoctorUser(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user.is_authenticated and getattr(request.user, 'is_doctor', False)
+    
+    
+# === PRESCRIPTION VIEWS ===
 
-# Prescriptions API's
 class PrescriptionCreateView(generics.CreateAPIView):
     queryset = Prescription.objects.all()
     serializer_class = PrescriptionSerializer
+    permission_classes = [permissions.IsAuthenticated, IsDoctorUser]
+
+    def perform_create(self, serializer):
+        doctor = self.request.user.doctor
+        patient_id = self.request.data.get("patient")
+
+        if not patient_id:
+            raise ValidationError(
+                {"patient": "This field is required."})
+
+        try:
+            from patients.models import Patient
+            patient = Patient.objects.get(id=patient_id)
+        except Patient.DoesNotExist:
+            raise ValidationError({"patient": "Invalid patient ID."})
+
+        serializer.save(doctor=doctor, patient=patient)
 
 
-class PrescriptionListView(generics.ListAPIView):
-    queryset = Prescription.objects.all()
+
+class MyPrescriptionsView(generics.ListAPIView):
     serializer_class = PrescriptionSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        if hasattr(user, 'patient'):
+            return Prescription.objects.filter(patient=user.patient)
+        return Prescription.objects.none()
 
 
-class PrescriptionDetailView(generics.RetrieveAPIView):
-    queryset = Prescription.objects.all()
+
+class DoctorPrescriptionsView(generics.ListAPIView):
     serializer_class = PrescriptionSerializer
+    permission_classes = [permissions.IsAuthenticated, IsDoctorUser]
+
+    def get_queryset(self):
+        return Prescription.objects.filter(doctor=self.request.user.doctor)
+
+
+
+class MyPrescriptionDetailView(generics.RetrieveAPIView):
+    serializer_class = PrescriptionSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        if hasattr(user, 'patient'):
+            return Prescription.objects.filter(patient=user.patient)
+        return Prescription.objects.none()
+
+
 
 
 class PrescriptionUpdateView(generics.UpdateAPIView):
     queryset = Prescription.objects.all()
     serializer_class = PrescriptionSerializer
+    permission_classes = [permissions.IsAuthenticated, IsDoctorUser]
 
 
 class PrescriptionDeleteView(generics.DestroyAPIView):
     queryset = Prescription.objects.all()
     serializer_class = PrescriptionSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
 
 
 
-# Prescriptions Medications API's
-class PrescriptionMedicationCreateView(generics.CreateAPIView):
-    queryset = PrescriptionMedication.objects.all()
-    serializer_class = PrescriptionMedicationSerializer
+
+# === MEDICATION VIEWS ===
+
+class MedicationCreateView(generics.CreateAPIView):
+    queryset = Medication.objects.all()
+    serializer_class = MedicationSerializer
+    permission_classes = [permissions.IsAuthenticated, IsDoctorUser]
 
 
-class PrescriptionMedicationListView(generics.ListAPIView):
-    queryset = PrescriptionMedication.objects.all()
-    serializer_class = PrescriptionMedicationSerializer
+class MedicationListView(generics.ListAPIView):
+    queryset = Medication.objects.all()
+    serializer_class = MedicationSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
 
-class PrescriptionMedicationDetailView(generics.RetrieveAPIView):
-    queryset = PrescriptionMedication.objects.all()
-    serializer_class = PrescriptionMedicationSerializer
+class MedicationDetailView(generics.RetrieveAPIView):
+    queryset = Medication.objects.all()
+    serializer_class = MedicationSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
 
-class PrescriptionMedicationUpdateView(generics.UpdateAPIView):
-    queryset = PrescriptionMedication.objects.all()
-    serializer_class = PrescriptionMedicationSerializer
+class MedicationUpdateView(generics.UpdateAPIView):
+    queryset = Medication.objects.all()
+    serializer_class = MedicationSerializer
+    permission_classes = [permissions.IsAuthenticated, IsDoctorUser]
 
 
-class PrescriptionMedicationDeleteView(generics.DestroyAPIView):
-    queryset = PrescriptionMedication.objects.all()
-    serializer_class = PrescriptionMedicationSerializer
+class MedicationDeleteView(generics.DestroyAPIView):
+    queryset = Medication.objects.all()
+    serializer_class = MedicationSerializer
+    permission_classes = [permissions.IsAuthenticated]

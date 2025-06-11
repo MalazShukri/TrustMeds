@@ -4,8 +4,7 @@ from .models import (
     Allergy, PatientAllergy,
     ChronicDisease,
     Surgery,
-    Disability,
-    PatientMedication
+    Disability
 )
 
 
@@ -55,7 +54,7 @@ class ChronicDiseaseSerializer(serializers.ModelSerializer):
         read_only_fields = ['patient']
 
     def get_disease_name(self, obj):
-        return str(obj.disease)
+        return str(obj.name)
 
 
 class SurgerySerializer(serializers.ModelSerializer):
@@ -67,7 +66,7 @@ class SurgerySerializer(serializers.ModelSerializer):
         read_only_fields = ['patient']
 
     def get_surgery_name(self, obj):
-        return str(obj.surgery)
+        return str(obj.name)
     
 class DisabilitySerializer(serializers.ModelSerializer):
     patient = serializers.StringRelatedField(read_only=True)
@@ -78,19 +77,8 @@ class DisabilitySerializer(serializers.ModelSerializer):
         read_only_fields = ['patient']
 
     def get_disability_name(self, obj):
-        return str(obj.disability)
+        return str(obj.name)
     
-
-class PatientMedicationSerializer(serializers.ModelSerializer):
-    patient = serializers.StringRelatedField(read_only=True)
-    medication_name = serializers.SerializerMethodField()
-    class Meta:
-        model = PatientMedication
-        fields = '__all__'
-        read_only_fields = ['patient']
-        
-    def get_medication_name(self, obj):
-        return str(obj.medication)
 
 
 class AllergySerializer(serializers.ModelSerializer):

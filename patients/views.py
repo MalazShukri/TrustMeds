@@ -90,15 +90,6 @@ class CreatePatientAllergyView(generics.CreateAPIView):
         serializer.save(patient=patient)
 
 
-class CreatePatientMedicationView(generics.CreateAPIView):
-    serializer_class = PatientMedicationSerializer
-    permission_classes = [IsAuthenticated, IsPatientUser]
-
-    def perform_create(self, serializer):
-        patient = get_object_or_404(Patient, user=self.request.user)
-        serializer.save(patient=patient)
-
-
 class CreateAppointmentView(generics.CreateAPIView):
     serializer_class = AppointmentSerializer
     permission_classes = [IsAuthenticated, IsPatientUser]
@@ -141,15 +132,6 @@ class PatientEmergencyContactView(APIView):
             contact_data = EmergencyContactSerializer(emergency_contact).data
             return Response(contact_data)
         return Response({"detail": "No emergency contact found."}, status=404)
-
-
-class PatientMedicationsView(APIView):
-    permission_classes = [IsAuthenticated, IsPatientUser]
-
-    def get(self, request):
-        patient = get_object_or_404(Patient, user=request.user)
-        medications = PatientMedication.objects.filter(patient=patient)
-        return Response(PatientMedicationSerializer(medications, many=True).data)
 
 
 class ChronicDiseasesView(APIView):
@@ -322,25 +304,6 @@ class DeleteDisabilityView(generics.DestroyAPIView):
     def get_queryset(self):
         patient = get_object_or_404(Patient, user=self.request.user)
         return Disability.objects.filter(patient=patient)
-
-
-# === Medication ===
-class UpdatePatientMedicationView(generics.UpdateAPIView):
-    serializer_class = PatientMedicationSerializer
-    permission_classes = [IsAuthenticated, IsPatientUser]
-
-    def get_queryset(self):
-        patient = get_object_or_404(Patient, user=self.request.user)
-        return PatientMedication.objects.filter(patient=patient)
-
-
-class DeletePatientMedicationView(generics.DestroyAPIView):
-    serializer_class = PatientMedicationSerializer
-    permission_classes = [IsAuthenticated, IsPatientUser]
-
-    def get_queryset(self):
-        patient = get_object_or_404(Patient, user=self.request.user)
-        return PatientMedication.objects.filter(patient=patient)
 
 
 # === Appointment ===

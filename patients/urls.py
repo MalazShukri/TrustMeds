@@ -23,8 +23,6 @@ urlpatterns = [
 
 
     # === Patient Home Sections ===
-    path('me/medications/', PatientMedicationsView.as_view(),
-         name='patient-medications'),
     path('me/appointments/', PatientAppointmentsView.as_view(),
          name='patient-appointments'),
     path('me/doctors/', PatientDoctorsView.as_view(), name='patient-doctors'),
@@ -79,14 +77,6 @@ urlpatterns = [
          UpdateDisabilityView.as_view(), name='update-disability'),
     path('delete-disability/<int:pk>/',
          DeleteDisabilityView.as_view(), name='delete-disability'),
-
-    # === Medication ===
-    path('create-medication/', CreatePatientMedicationView.as_view(),
-         name='create-medication'),
-    path('update-medication/<int:pk>/',
-         UpdatePatientMedicationView.as_view(), name='update-medication'),
-    path('delete-medication/<int:pk>/',
-         DeletePatientMedicationView.as_view(), name='delete-medication'),
     
     
     # === Appointment Management ===
