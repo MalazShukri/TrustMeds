@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Prescription, PrescriptionMedication, Medication
+from .models import Prescription, Medication
 
 
 class MedicationSerializer(serializers.ModelSerializer):

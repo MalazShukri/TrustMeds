@@ -59,17 +59,6 @@ class PatientDisabilityAdmin(admin.ModelAdmin):
     get_disability_name.short_description = 'Disability'
 
 
-# --- Patient Medication ---
-@admin.register(PatientMedication)
-class PatientMedicationAdmin(admin.ModelAdmin):
-    list_display = ('id', 'patient', 'get_medication_name',
-                    'dosage', 'frequency')
-
-    def get_medication_name(self, obj):
-        return obj.medication.name
-    get_medication_name.short_description = 'Medication'
-
-
 # --- Visit ---
 @admin.register(Visit)
 class VisitAdmin(admin.ModelAdmin):
